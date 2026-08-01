@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 
+import os
 from pathlib import Path
 
 from datetime import timedelta
@@ -161,3 +162,17 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 RAZORPAY_KEY_ID = "rzp_test_TKChG17EEo2veA"
 RAZORPAY_KEY_SECRET = "wbJDBXuSvvTvPqkPtDiZU6d7"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+
+EMAIL_PORT = 587
+
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv("peruvedaifarm@gmail.com")
+
+EMAIL_HOST_PASSWORD = os.getenv("wnqm ftvg berh iucp")
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

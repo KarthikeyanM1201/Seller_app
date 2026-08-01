@@ -12,6 +12,7 @@ from django.db import transaction
 
 from notifications.utils import create_notification
 from .models import Order, OrderItem
+from accounts.email_utils import send_order_confirmation
 
 class AddToCartView(generics.CreateAPIView):
     serializer_class = CartSerializer
@@ -152,6 +153,8 @@ class CheckoutView(APIView):
         order.total_amount = total
         order.save()
 
+        send_order_confirmation(order)
+        
         # Customer Notification
         create_notification(
             user=request.user,
