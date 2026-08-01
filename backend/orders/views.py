@@ -10,6 +10,7 @@ from .serializers import CartSerializer, OrderSerializer
 from products.models import Product
 from django.db import transaction
 
+from notifications.utils import create_notification
 from .models import Order, OrderItem
 
 class AddToCartView(generics.CreateAPIView):
@@ -150,6 +151,23 @@ class CheckoutView(APIView):
 
         order.total_amount = total
         order.save()
+
+        # Customer Notification
+        create_notification(
+            user=request.user,
+            title="Order Placed",
+            message=f"Your order #{order.id} has been placed successfully.",
+            notification_type="order",
+        )
+
+        seller = order.order_items.first().product.seller
+
+        create_notification(
+            user=seller,
+            title="New Order Received",
+            message=f"You received a new order #{order.id}.",
+            notification_type="order",
+        )
 
         cart_items.delete()
 

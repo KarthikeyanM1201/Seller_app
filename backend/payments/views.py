@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from notifications.utils import create_notification
 from orders.models import Order
 from .models import Payment
 from .serializers import PaymentSerializer
@@ -87,6 +87,13 @@ class VerifyPaymentView(APIView):
             payment.razorpay_signature = razorpay_signature
             payment.status = "Success"
             payment.save()
+
+            create_notification(
+                user=payment.user,
+                title="Payment Successful",
+                message=f"Payment for Order #{payment.order.id} was successful.",
+                notification_type="payment",
+            )
 
             # Update order status
             payment.order.status = "confirmed"
