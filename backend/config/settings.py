@@ -157,3 +157,6 @@ SIMPLE_JWT = {
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+RAZORPAY_KEY_ID = "rzp_test_TKChG17EEo2veA"
+RAZORPAY_KEY_SECRET = "wbJDBXuSvvTvPqkPtDiZU6d7"

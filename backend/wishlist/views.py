@@ -47,12 +47,21 @@ class WishlistListView(generics.ListAPIView):
             customer=self.request.user
         ).order_by("-created_at")
 
-class WishlistListView(generics.ListAPIView):
-    serializer_class = WishlistSerializer
+class RemoveWishlistView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Wishlist.objects.filter(
-            customer=self.request.user
-        ).order_by("-created_at")
+    def delete(self, request, pk):
+
+        item = get_object_or_404(
+            Wishlist,
+            id=pk,
+            customer=request.user
+        )
+
+        item.delete()
+
+        return Response(
+            {"message": "Removed from wishlist."},
+            status=status.HTTP_200_OK
+        )
     
