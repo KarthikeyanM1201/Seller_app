@@ -51,8 +51,9 @@ INSTALLED_APPS = [
     "delivery",
     "payments",
     "notifications",
-     "django_filters",
-     "wishlist",
+    "django_filters",
+    "wishlist",
+    "dashboard",
 ]
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",

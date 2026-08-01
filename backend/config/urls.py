@@ -12,6 +12,7 @@ urlpatterns = [
     path("api/wishlist/", include("wishlist.urls")),
     path("api/payments/", include("payments.urls")),
     path("api/notifications/", include("notifications.urls")),
+    path("api/delivery/", include("delivery.urls")),
 ]
 
 if settings.DEBUG:
