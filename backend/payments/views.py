@@ -11,6 +11,7 @@ from notifications.utils import create_notification
 from orders.models import Order
 from .models import Payment
 from .serializers import PaymentSerializer
+from accounts.email_service import EmailService
 
 #Razorpay client
 client = razorpay.Client(
@@ -88,6 +89,10 @@ class VerifyPaymentView(APIView):
             payment.status = "Success"
             payment.save()
 
+            # Update order status
+            payment.order.status = "confirmed"
+            payment.order.save()
+
             create_notification(
                 user=payment.user,
                 title="Payment Successful",
@@ -95,9 +100,7 @@ class VerifyPaymentView(APIView):
                 notification_type="payment",
             )
 
-            # Update order status
-            payment.order.status = "confirmed"
-            payment.order.save()
+            EmailService.send_payment_success(payment.order)
 
             return Response(
                 {

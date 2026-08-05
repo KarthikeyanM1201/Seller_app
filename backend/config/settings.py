@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(^fs_pz)a2)6=dwka)iw416ag$xx&^16u8_v8fw=---^4ojzh_'
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     "django_filters",
     "wishlist",
     "dashboard",
+    "drf_spectacular",
 ]
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -66,6 +68,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
 ROOT_URLCONF = 'config.urls'
 
@@ -139,6 +147,12 @@ STATIC_URL = 'static/'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Seller Marketplace API",
+    "DESCRIPTION": "Professional Django REST API for Seller Marketplace",
+    "VERSION": "1.0.0",
+}
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -147,7 +161,10 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
+
     ),
+
+     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 AUTH_USER_MODEL = "accounts.User"
 
@@ -160,8 +177,8 @@ SIMPLE_JWT = {
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-RAZORPAY_KEY_ID = "rzp_test_TKChG17EEo2veA"
-RAZORPAY_KEY_SECRET = "wbJDBXuSvvTvPqkPtDiZU6d7"
+RAZORPAY_KEY_ID = config("RAZORPAY_KEY_ID")
+RAZORPAY_KEY_SECRET = config("RAZORPAY_KEY_SECRET")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
@@ -171,8 +188,8 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = os.getenv("peruvedaifarm@gmail.com")
+EMAIL_HOST_USER =config("EMAIL_HOST_USER")
 
-EMAIL_HOST_PASSWORD = os.getenv("wnqm ftvg berh iucp")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
