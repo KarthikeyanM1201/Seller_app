@@ -6,8 +6,15 @@ from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
 )
+from django.http import JsonResponse
+
+def home(request):
+    return JsonResponse({
+        "message": "Seller Marketplace API is running successfully!"
+    })
 
 urlpatterns = [
+    path("", home),
     path("admin/", admin.site.urls),
 
     path("api/auth/", include("accounts.urls")),
